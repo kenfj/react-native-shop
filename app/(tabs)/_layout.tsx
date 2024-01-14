@@ -1,57 +1,53 @@
-import FontAwesome from '@expo/vector-icons/FontAwesome';
+import { InfoIcon } from 'components/icons/miscIcon';
+import { CartIcon, HomeIcon, SearchIcon, UserIcon } from 'components/icons/tabIcons';
 import { Link, Tabs } from 'expo-router';
-import { Pressable, StyleSheet } from 'react-native';
+import { Pressable } from 'react-native';
 
-function TabBarIcon(props: {
-  name: React.ComponentProps<typeof FontAwesome>['name'];
-  color: string;
-}) {
-  return <FontAwesome size={28} style={styles.tabBarIcon} {...props} />;
-}
+const InfoLink = () => (
+  <Link href="/modal" asChild>
+    <Pressable>{InfoIcon}</Pressable>
+  </Link>
+);
 
 export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: 'black',
+        headerStyle: {
+          backgroundColor: 'lightgreen',
+        },
       }}>
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Tab One',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-          headerRight: () => (
-            <Link href="/modal" asChild>
-              <Pressable>
-                {({ pressed }) => (
-                  <FontAwesome
-                    name="info-circle"
-                    size={25}
-                    color="gray"
-                    style={[styles.headerRight, { opacity: pressed ? 0.5 : 1 }]}
-                  />
-                )}
-              </Pressable>
-            </Link>
-          ),
+          title: 'HOME',
+          tabBarIcon: HomeIcon,
+          headerRight: InfoLink,
         }}
       />
       <Tabs.Screen
-        name="two"
+        name="shops"
         options={{
-          title: 'Tab Two',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          title: '探す',
+          tabBarIcon: SearchIcon,
+          headerRight: InfoLink,
+        }}
+      />
+      <Tabs.Screen
+        name="cart"
+        options={{
+          title: 'お会計',
+          tabBarIcon: CartIcon,
+        }}
+      />
+      <Tabs.Screen
+        name="profile"
+        options={{
+          title: 'ユーザー情報',
+          tabBarIcon: UserIcon,
         }}
       />
     </Tabs>
   );
 }
-
-const styles = StyleSheet.create({
-  headerRight: {
-    marginRight: 15,
-  },
-  tabBarIcon: {
-    marginBottom: -3,
-  },
-});

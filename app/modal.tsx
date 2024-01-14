@@ -1,18 +1,24 @@
+import { InfoIcon } from 'components/icons/miscIcon';
+import { Container, Hr, P } from 'components/tamagui/styled';
+import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { Platform } from 'react-native';
-import { YStack, Paragraph, Separator, Theme } from 'tamagui';
-
-import EditScreenInfo from '../components/edit-screen-info';
+import { Theme, H3 } from 'tamagui';
 
 export default function ModalScreen() {
   return (
     <Theme name="light">
-      <YStack flex={1} alignItems="center" justifyContent="center">
+      <Container>
+        <Stack.Screen options={{ headerTitle: `ご案内` }} />
+
         <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
-        <Paragraph>Modal</Paragraph>
-        <Separator />
-        <EditScreenInfo path="app/modal.tsx" />
-      </YStack>
+        <H3 p={5}>
+          <InfoIcon pressed={false} />
+          本アプリについて
+        </H3>
+        <Hr />
+        <P>利用方法云々。</P>
+      </Container>
     </Theme>
   );
 }
