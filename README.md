@@ -17,6 +17,8 @@ pnpm --version
 
 # install packages
 pnpm install --frozen-lockfile
+# or
+pnpm exec expo install
 ```
 
 * start Supabase docker
@@ -97,12 +99,75 @@ pnpm exec expo install react-native-root-toast
 
 ## Upgrade
 
-```bash
-corepack prepare pnpm@8.14.1 --activate
+* How do I update npm packages in Expo
+  - https://stackoverflow.com/questions/66498615
+* other resources
+  - https://forums.expo.dev/t/how-to-downgrade-all-npm-packages-to-compatible-versions-after-upgrading-all-dependencies/65939/3
+  - https://starter.obytes.com/guides/upgrading-deps/
 
-# check
-pnpm outdated
+```bash
+# upgrade pnpm
+corepack prepare pnpm@8.14.1 --activate
+```
+
+```bash
+# check project settings
+pnpm dlx expo-doctor
+# Didn't find any issues with the project!
 
 # upgrade
-pnpm update
+pnpm dlx expo-cli upgrade
+# ✔ Would you like to proceed? … yes
+# ...
+# 👏 Automated upgrade steps complete.
+
+# check again
+pnpm dlx expo-doctor
+```
+
+* failed upgrade message shows next command to fix
+
+```bash
+✔ Check Expo config for common issues
+✔ Check package.json for common issues
+✔ Check dependencies for packages that should not be installed directly
+✔ Check for common project setup issues
+✔ Check npm/ yarn versions
+✔ Check Expo config (app.json/ app.config.js) schema
+✖ Check that packages match versions required by installed Expo SDK
+✔ Check for legacy global CLI installed locally
+✔ Check that native modules do not use incompatible support packages
+✔ Check that native modules use compatible support package versions for installed Expo SDK
+
+Detailed check results:
+
+Some dependencies are incompatible with the installed expo version:
+  react-native@0.72.5 - expected version: 0.72.6
+Your project may not work correctly until you install the correct versions of the packages.
+Fix with: npx expo install --fix
+Found outdated dependencies
+Advice: Use 'npx expo install --check' to review and upgrade your dependencies.
+
+One or more checks failed, indicating possible issues with the project.
+```
+
+```bash
+pnpm dlx expo install --check
+# Some dependencies are incompatible with the installed expo version:
+#   react-native@0.72.5 - expected version: 0.72.6
+# Your project may not work correctly until you install the correct versions of the packages.
+# Fix with: npx expo install --fix
+# ✔ Fix dependencies? … yes
+# › Installing 1 SDK 49.0.0 compatible native module using pnpm
+
+# check again
+pnpm dlx expo-doctor
+# Didn't find any issues with the project!
+```
+
+* Note: `--fix-dependencies` seems to be old and no longer works
+  - https://stackoverflow.com/questions/75977890
+
+```bash
+# pnpm dlx expo-doctor --fix-dependencies
 ```
