@@ -1,3 +1,11 @@
+-- https://qiita.com/7mpy/items/bedd102355a51e93a7df
+alter database postgres set timezone to 'Asia/Tokyo';
+
+DROP TABLE IF EXISTS "shops";
+DROP TABLE IF EXISTS "order_items";
+DROP TABLE IF EXISTS "orders";
+DROP TABLE IF EXISTS "products";
+
 CREATE TABLE IF NOT EXISTS "shops" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"shop_name" varchar(100) NOT NULL,
@@ -9,7 +17,6 @@ CREATE TABLE IF NOT EXISTS "order_items" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"order_id" integer NOT NULL,
 	"shop_id" integer NOT NULL,
-	"shop_name" varchar(100) NOT NULL,
 	"product_id" integer NOT NULL,
 	"product_name" varchar(100) NOT NULL,
 	"product_price" double precision NOT NULL,
@@ -20,7 +27,8 @@ CREATE TABLE IF NOT EXISTS "order_items" (
 CREATE TABLE IF NOT EXISTS "orders" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"shop_id" integer NOT NULL,
-	"customer_email" varchar(100) NOT NULL,
+	"order_date" timestamptz NOT NULL,
+	"email" varchar(100) NOT NULL,
 	"total" double precision DEFAULT 0
 );
 --> statement-breakpoint

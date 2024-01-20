@@ -1,73 +1,56 @@
-import { Product } from 'models/Product';
+import { CartProduct, Product } from 'models/Product';
 import { create } from 'zustand';
 
 // https://www.youtube.com/watch?v=3tobiO8zDDA
 // https://github.com/Galaxies-dev/react-native-ecommerce
 
 interface CartState {
-  cartProducts: (Product & { quantity: number })[];
-  totalPrice: number;
+  cartProducts: CartProduct[];
+  total: () => number;
   addProduct: (product: Product) => void;
   reduceProduct: (product: Product) => void;
   clearCart: () => void;
 }
 
-export const useCartStore = create<CartState>((set) => ({
+export const useCartStore = create<CartState>((set, get) => ({
   cartProducts: [],
-  totalPrice: 0,
+
+  total: () =>
+    get()
+      .cartProducts.map((_) => _.product_price * _.quantity)
+      .reduce((sum, current) => sum + current, 0),
+
   addProduct: (product: Product) =>
     set((state) => {
-      // check if multiple shops
-      const shopIds = new Set(state.cartProducts.map((p) => p.shop_id));
-
-      if (shopIds.size > 1) {
-        throw new Error(`single shop validation failed: ${shopIds}`);
+      if (state.cartProducts.length > 0) {
+        if (product.shop_id !== state.cartProducts[0].shop_id) {
+          throw new Error('ShopIdDiffer');
+        }
       }
 
-      const shopId = shopIds.values().next().value;
-
-      if (shopId !== undefined && shopId !== product.shop_id) {
-        throw new Error('ShopIdDiffer');
-      }
-
-      state.totalPrice += product.product_price;
       const hasProduct = state.cartProducts.find((p) => p.id === product.id);
 
+      const updated = state.cartProducts.map((p) => ({
+        ...p,
+        quantity: p.quantity + (p.id === product.id ? 1 : 0),
+      }));
+
       if (hasProduct) {
-        return {
-          cartProducts: state.cartProducts.map((p) => {
-            if (p.id === product.id) {
-              return { ...p, quantity: p.quantity + 1 };
-            }
-            return p;
-          }),
-        };
+        return { cartProducts: updated };
       } else {
-        return {
-          cartProducts: [...state.cartProducts, { ...product, quantity: 1 }],
-        };
+        return { cartProducts: [...updated, { ...product, quantity: 1 }] };
       }
     }),
 
   reduceProduct: (product: Product) =>
-    set((state) => {
-      state.totalPrice -= product.product_price;
+    set((state) => ({
+      cartProducts: state.cartProducts
+        .map((p) => ({
+          ...p,
+          quantity: p.quantity + (p.id === product.id ? -1 : 0),
+        }))
+        .filter((p) => p.quantity > 0),
+    })),
 
-      return {
-        cartProducts: state.cartProducts
-          .map((p) => {
-            if (p.id === product.id) {
-              return { ...p, quantity: p.quantity - 1 };
-            }
-            return p;
-          })
-          .filter((p) => p.quantity > 0),
-      };
-    }),
-
-  clearCart: () =>
-    set((state) => {
-      state.totalPrice = 0;
-      return { cartProducts: [] };
-    }),
+  clearCart: () => set(() => ({ cartProducts: [] })),
 }));

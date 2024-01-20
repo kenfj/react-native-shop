@@ -8,3 +8,7 @@ export type Product = {
   product_stock: number;
   product_image: string;
 };
+
+export type CartProduct = Product & {
+  quantity: number;
+};

@@ -22,12 +22,12 @@ export const AddCartDialog = ({ open, setOpen }: AddCartDialogProps) => {
           <Dialog.Title>
             <H5>
               <InfoIcon pressed={false} />
-              カード内には別のお店の商品が入っています
+              カート内には別のお店の商品が入っています
             </H5>
           </Dialog.Title>
           <Dialog.Description>
             <S>他店の商品と同時に購入はできません。</S>
-            <S>カード内の商品を削除してください。</S>
+            <S>カート内の商品を削除してください。</S>
           </Dialog.Description>
           <Dialog.Close>
             <Button onPress={() => setOpen(false)}>Close</Button>

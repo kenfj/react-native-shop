@@ -1,7 +1,8 @@
 export type Order = {
   id: number;
   shop_id: number;
-  customer_email: string;
+  order_date: string;
+  email: string;
   total: number;
 };
 

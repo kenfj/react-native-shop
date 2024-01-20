@@ -3,10 +3,9 @@ import { Container, Hr, P, S } from 'components/tamagui/styled';
 import { OrderCreatedToast } from 'components/toasts/OrderCreatedToast';
 import { Link } from 'expo-router';
 import { findAll } from 'lib/api';
-import { insertOrder } from 'lib/apiOrder';
+import { createOrder } from 'lib/apiOrder';
 import { useCartStore } from 'lib/cartStore';
-import { Order, OrderToInsert } from 'models/Order';
-import { OrderItemToInsert } from 'models/OrderItem';
+import { Order } from 'models/Order';
 import { Shop } from 'models/Shop';
 import { useEffect, useState } from 'react';
 import { FlatList, Keyboard } from 'react-native';
@@ -17,9 +16,9 @@ export default function CartScreen() {
   const [email, setEmail] = useState('');
   const [order, setOrder] = useState<Order>();
   const [submitting, setSubmitting] = useState(false);
-  const { cartProducts, totalPrice, addProduct, reduceProduct, clearCart } = useCartStore(
-    (state) => ({ ...state })
-  );
+  const { cartProducts, total, addProduct, reduceProduct, clearCart } = useCartStore((state) => ({
+    ...state,
+  }));
 
   useEffect(() => {
     (async () => {
@@ -34,31 +33,8 @@ export default function CartScreen() {
 
     if (cartProducts.length === 0) return;
 
-    // assume shops in cartProducts are unique
-    const shop = shops.find((shop) => shop.id === cartProducts[0].shop_id);
-
-    if (shop === undefined) return;
-
-    const order: OrderToInsert = {
-      shop_id: shop.id,
-      customer_email: email,
-      total: totalPrice,
-    };
-    const orderItems: OrderItemToInsert[] = cartProducts.map((product) => {
-      return {
-        order_id: null!,
-        shop_id: shop.id,
-        shop_name: shop.shop_name,
-        product_id: product.id,
-        product_name: product.product_name,
-        product_price: product.product_price,
-        quantity: product.quantity,
-        total: product.product_price * product.quantity,
-      };
-    });
-
     try {
-      const res = await insertOrder(order, orderItems);
+      const res = await createOrder({ email, cartProducts });
       setOrder(res.order);
       clearCart();
 
@@ -102,7 +78,7 @@ export default function CartScreen() {
         />
         <Hr />
 
-        <S>合計額: {totalPrice.toFixed(2)}円</S>
+        <S>合計額: {total().toFixed(2)}円</S>
         <Hr />
 
         <XStack>

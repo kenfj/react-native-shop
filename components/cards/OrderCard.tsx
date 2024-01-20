@@ -11,7 +11,7 @@ type OrderCardProps = {
 export const OrderCard = ({ order, orderItems }: OrderCardProps) => (
   <Card>
     <P>
-      Email: {order.customer_email} / Total: {order.total}
+      Email: {order.email} / Total: {order.total}
     </P>
 
     {orderItems
