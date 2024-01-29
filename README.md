@@ -28,10 +28,11 @@ pnpm exec expo install
   - http://localhost:8000/project/default/sql/1
 * check supabase URL in API Settings
   - http://localhost:8000/project/default/settings/api
+  - it should be `http://localhost:8000` for docker supabase
 * check supabase Project API key in API Docs
   - http://localhost:8000/project/default/api?resource=products
   - select `anon (public)`
-* copy `.env.sample` as `.env` and update
+* update `.env` (or create `.env.local` to override `.env`)
   - `EXPO_PUBLIC_API_URL` is Supabase URL
   - `EXPO_PUBLIC_API_KEY` is Supabase anon key
 
@@ -45,7 +46,7 @@ pnpm exec expo start --ios -c
 pnpm exec expo start --android -c
 ```
 
-## Setup Project
+## Initial Project Setup Notes
 
 ```bash
 # expo stack quick setup https://createexpostack.com/
