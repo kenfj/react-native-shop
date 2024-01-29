@@ -22,4 +22,4 @@ expo-env.d.ts
 .metro-health-check*
 
 # https://docs.expo.dev/guides/environment-variables/
-.env
+.env.local
