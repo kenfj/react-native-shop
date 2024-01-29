@@ -11,11 +11,11 @@
 node --version
 # v20.11.0
 npm --version
-# 10.3.0
+# 10.4.0
 pnpm --version
-# 8.14.1
+# 8.14.3
 
-# install packages
+# install packages (it will create node_modules directory)
 pnpm install --frozen-lockfile
 # or
 pnpm exec expo install
@@ -41,8 +41,8 @@ pnpm run ios
 pnpm run android
 
 # start with clear cache sometimes
-pnpm run ios -c
-pnpm run android -c
+pnpm exec expo start --ios -c
+pnpm exec expo start --android -c
 ```
 
 ## Setup Project
@@ -99,6 +99,8 @@ pnpm exec expo install react-native-root-toast
 
 ## Upgrade
 
+* official doc
+  - https://docs.expo.dev/workflow/upgrading-expo-sdk-walkthrough/
 * How do I update npm packages in Expo
   - https://stackoverflow.com/questions/66498615
 * other resources
@@ -125,7 +127,7 @@ pnpm dlx expo-cli upgrade
 pnpm dlx expo-doctor
 ```
 
-* failed upgrade message shows next command to fix
+* when expo-doctor failed, the message shows the next command to fix
 
 ```bash
 ✔ Check Expo config for common issues
